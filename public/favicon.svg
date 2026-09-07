@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#99182A" />
+      <stop offset="100%" stop-color="#B3263B" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#99182A" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="#FAEEEF" stroke="#F8CCD7" stroke-width="3"/>
+  <circle cx="50" cy="50" r="38" fill="url(#glowGrad)" filter="url(#shadow)"/>
+  <text x="50" y="58" font-family="'Playfair Display', Georgia, serif" font-size="22" font-weight="700" fill="#FAEEEF" text-anchor="middle" letter-spacing="1">CP</text>
+</svg>

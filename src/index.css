@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Custom luxury scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #FAEEEF;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #F8CCD7;
+    border-radius: 9999px;
+    border: 2px solid #FAEEEF;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #99182A;
+  }
+}
+
+@layer utilities {
+  .bg-radial-glow {
+    background: radial-gradient(circle at 50% 30%, rgba(248, 204, 215, 0.45) 0%, rgba(250, 238, 239, 0) 70%);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(248, 204, 215, 0.6);
+  }
+
+  .glass-drawer {
+    background: rgba(250, 238, 239, 0.94);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-left: 1px solid rgba(248, 204, 215, 0.7);
+  }
+
+  .text-gradient-wine {
+    background: linear-gradient(135deg, #99182A 0%, #B3263B 50%, #77121E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
