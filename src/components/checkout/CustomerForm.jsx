@@ -7,14 +7,14 @@ export const CustomerForm = ({
   onChange,
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-3.5">
       {/* Campo: Nombre Completo */}
       <div>
-        <label className="block text-xs font-semibold text-brand-text mb-1">
+        <label className="block text-xs font-bold text-brand-text mb-1 uppercase tracking-wider">
           Nombre completo <span className="text-brand-wine">*</span>
         </label>
         <div className="relative">
-          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-wine/70 pointer-events-none">
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-wine/80 pointer-events-none">
             <User className="w-4 h-4" />
           </div>
           <input
@@ -22,11 +22,11 @@ export const CustomerForm = ({
             name="name"
             value={formData.name}
             onChange={(e) => onChange('name', e.target.value)}
-            placeholder="Ej. Valentina Gómez"
-            className={`w-full pl-10 pr-4 py-2.5 rounded-2xl bg-brand-pearl/50 border text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none focus:ring-2 transition-all ${
+            placeholder="Ej: Valentina Gómez"
+            className={`w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border-2 text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none transition-all ${
               errors.name
-                ? 'border-rose-400 focus:ring-rose-400'
-                : 'border-brand-blush focus:ring-brand-wine focus:border-brand-wine'
+                ? 'border-rose-400 focus:ring-2 focus:ring-rose-200'
+                : 'border-brand-wine/20 focus:border-brand-wine focus:ring-2 focus:ring-brand-wine/15'
             }`}
           />
         </div>
@@ -39,11 +39,11 @@ export const CustomerForm = ({
 
       {/* Campo: Teléfono Celular */}
       <div>
-        <label className="block text-xs font-semibold text-brand-text mb-1">
+        <label className="block text-xs font-bold text-brand-text mb-1 uppercase tracking-wider">
           Número de Celular (WhatsApp) <span className="text-brand-wine">*</span>
         </label>
         <div className="relative">
-          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-wine/70 pointer-events-none">
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-wine/80 pointer-events-none">
             <Phone className="w-4 h-4" />
           </div>
           <input
@@ -51,11 +51,11 @@ export const CustomerForm = ({
             name="phone"
             value={formData.phone}
             onChange={(e) => onChange('phone', e.target.value)}
-            placeholder="Ej. 3123456789"
-            className={`w-full pl-10 pr-4 py-2.5 rounded-2xl bg-brand-pearl/50 border text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none focus:ring-2 transition-all ${
+            placeholder="Ej: 3123456789"
+            className={`w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border-2 text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none transition-all ${
               errors.phone
-                ? 'border-rose-400 focus:ring-rose-400'
-                : 'border-brand-blush focus:ring-brand-wine focus:border-brand-wine'
+                ? 'border-rose-400 focus:ring-2 focus:ring-rose-200'
+                : 'border-brand-wine/20 focus:border-brand-wine focus:ring-2 focus:ring-brand-wine/15'
             }`}
           />
         </div>
@@ -68,11 +68,11 @@ export const CustomerForm = ({
 
       {/* Campo: Dirección y Ciudad (Opcional) */}
       <div>
-        <label className="block text-xs font-semibold text-brand-text mb-1">
-          Ciudad y Dirección de Envío <span className="text-brand-text-muted font-normal">(Opcional)</span>
+        <label className="block text-xs font-bold text-brand-text mb-1 uppercase tracking-wider">
+          Ciudad y Dirección de Entrega <span className="text-brand-text-muted font-normal text-[10px]">(Opcional)</span>
         </label>
         <div className="relative">
-          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-wine/70 pointer-events-none">
+          <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-brand-wine/80 pointer-events-none">
             <MapPin className="w-4 h-4" />
           </div>
           <input
@@ -80,19 +80,19 @@ export const CustomerForm = ({
             name="address"
             value={formData.address}
             onChange={(e) => onChange('address', e.target.value)}
-            placeholder="Ej. Medellín, Cra 43A # 1-50 Apto 402"
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-brand-pearl/50 border border-brand-blush text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand-wine focus:border-brand-wine transition-all"
+            placeholder="Ej: Medellín, Cra 43A # 1-50 Apto 402"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white border-2 border-brand-wine/20 text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none focus:border-brand-wine focus:ring-2 focus:ring-brand-wine/15 transition-all"
           />
         </div>
       </div>
 
       {/* Campo: Notas Adicionales (Opcional) */}
       <div>
-        <label className="block text-xs font-semibold text-brand-text mb-1">
-          Indicaciones adicionales <span className="text-brand-text-muted font-normal">(Opcional)</span>
+        <label className="block text-xs font-bold text-brand-text mb-1 uppercase tracking-wider">
+          Notas o Instrucciones <span className="text-brand-text-muted font-normal text-[10px]">(Opcional)</span>
         </label>
         <div className="relative">
-          <div className="absolute left-3.5 top-3 text-brand-wine/70 pointer-events-none">
+          <div className="absolute left-3.5 top-3 text-brand-wine/80 pointer-events-none">
             <FileText className="w-4 h-4" />
           </div>
           <textarea
@@ -100,8 +100,8 @@ export const CustomerForm = ({
             rows="2"
             value={formData.notes}
             onChange={(e) => onChange('notes', e.target.value)}
-            placeholder="Ej. Si tienen empaque para regalo o instrucciones de entrega..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-brand-pearl/50 border border-brand-blush text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand-wine focus:border-brand-wine transition-all resize-none"
+            placeholder="Ej: Empaque para regalo, horario de entrega preferido..."
+            className="w-full pl-10 pr-4 py-2 rounded-2xl bg-white border-2 border-brand-wine/20 text-sm text-brand-text placeholder-brand-text-muted/60 focus:outline-none focus:border-brand-wine focus:ring-2 focus:ring-brand-wine/15 transition-all resize-none"
           />
         </div>
       </div>

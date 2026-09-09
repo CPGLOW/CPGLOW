@@ -44,15 +44,16 @@ export const Modal = ({
         aria-hidden="true"
       />
 
-      {/* Contenedor Modal */}
+      {/* Contenedor Modal con Bordes Nítidos y Sombra de Lujo */}
       <div
-        className={`relative w-full ${maxWidth} max-h-[92vh] bg-white rounded-3xl shadow-2xl border border-brand-blush/80 overflow-hidden z-10 flex flex-col animate-slide-up ${className}`}
+        className={`relative w-full ${maxWidth} max-h-[90vh] bg-white rounded-3xl shadow-[0_25px_60px_-15px_rgba(43,14,20,0.35)] border-2 border-brand-wine/25 ring-1 ring-black/5 overflow-hidden z-10 flex flex-col overscroll-contain animate-slide-up ${className}`}
         role="dialog"
         aria-modal="true"
+        data-lenis-prevent="true"
       >
         {/* Header si existe título */}
         {(title || subtitle) && (
-          <div className="px-6 pt-5 pb-4 border-b border-brand-nude flex items-start justify-between bg-brand-pearl/50 flex-shrink-0">
+          <div className="px-5 sm:px-6 pt-5 pb-4 border-b border-brand-nude/80 flex items-start justify-between bg-gradient-to-r from-brand-pearl to-white flex-shrink-0">
             <div>
               {title && (
                 <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-wine">
@@ -75,7 +76,7 @@ export const Modal = ({
           </div>
         )}
 
-        {/* Botón de cierre flotante si no hay header con título (Siempre visible, con fondo y sombra) */}
+        {/* Botón de cierre flotante si no hay header con título */}
         {!title && !subtitle && (
           <button
             onClick={onClose}
@@ -86,8 +87,8 @@ export const Modal = ({
           </button>
         )}
 
-        {/* Contenido */}
-        <div className="flex-1 overflow-hidden flex flex-col min-h-0">
+        {/* Contenido con scroll interno para no desbordar */}
+        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col overscroll-contain" data-lenis-prevent="true">
           {children}
         </div>
       </div>

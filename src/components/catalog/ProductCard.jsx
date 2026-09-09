@@ -1,24 +1,43 @@
 import React, { useState } from 'react';
-import { ShoppingBag, Eye, Sparkles } from 'lucide-react';
+import { ShoppingBag, Eye, Sparkles, Pencil, Trash2, Images } from 'lucide-react';
 import { formatCurrency } from '../../utils/formatters';
 import { QuantitySelector } from '../common/QuantitySelector';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { useCart } from '../../hooks/useCart';
 
-export const ProductCard = ({ product, onViewDetails }) => {
+export const ProductCard = ({ 
+  product, 
+  onViewDetails,
+  isAdmin = false,
+  onEdit,
+  onDelete,
+}) => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const isOutOfStock = (product.stock || 0) <= 0;
   const isLowStock = product.stock > 0 && product.stock <= 5;
+  const hasMultipleImages = Array.isArray(product.imagenes) && product.imagenes.length > 0;
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     if (isOutOfStock) return;
     addToCart(product, quantity);
-    setQuantity(1); // Reset local selector
+    setQuantity(1);
+  };
+
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    if (onEdit) onEdit(product);
+  };
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    if (window.confirm(`¿Estás segura de que deseas eliminar "${product.nombre}" del catálogo?`)) {
+      if (onDelete) onDelete(product.id);
+    }
   };
 
   return (
@@ -26,6 +45,32 @@ export const ProductCard = ({ product, onViewDetails }) => {
       onClick={() => onViewDetails(product)}
       className="group relative bg-white rounded-3xl overflow-hidden border border-brand-blush/70 shadow-card hover:shadow-luxury hover:-translate-y-1 transition-all duration-300 flex flex-col cursor-pointer"
     >
+      {/* Botones de Administración Flotantes (Solo visibles para la dueña) */}
+      {isAdmin && (
+        <div 
+          className="absolute top-3 right-3 z-30 flex items-center gap-1.5 bg-white/95 backdrop-blur-md p-1 rounded-2xl shadow-lg border border-brand-blush"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            onClick={handleEditClick}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-brand-wine text-white text-xs font-semibold hover:bg-brand-wine-dark transition-colors shadow-sm cursor-pointer"
+            title="Editar producto"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+            <span>Editar</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleDeleteClick}
+            className="p-1.5 rounded-xl text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+            title="Eliminar producto"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Contenedor de Imagen con Relación de Aspecto Elegante */}
       <div className="relative aspect-square w-full overflow-hidden bg-brand-pearl/60">
         {/* Placeholder mientras carga */}
@@ -44,6 +89,16 @@ export const ProductCard = ({ product, onViewDetails }) => {
           }`}
           loading="lazy"
         />
+
+        {/* Indicador discreto si tiene más de 1 imagen */}
+        {hasMultipleImages && !isAdmin && (
+          <div className="absolute top-3 right-3 z-10">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-black/50 backdrop-blur-sm text-white text-[10px] font-medium">
+              <Images className="w-2.5 h-2.5 text-brand-blush" />
+              <span>+{product.imagenes.length}</span>
+            </span>
+          </div>
+        )}
 
         {/* Overlay sutil al hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">

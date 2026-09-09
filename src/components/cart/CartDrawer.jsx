@@ -32,7 +32,10 @@ export const CartDrawer = ({ onOpenCheckout }) => {
       />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col border-l border-brand-blush/80 animate-slide-up">
+        <div 
+          className="w-screen max-w-md bg-white shadow-2xl flex flex-col border-l border-brand-blush/80 animate-slide-up overscroll-contain"
+          data-lenis-prevent="true"
+        >
           {/* Header del Carrito */}
           <div className="p-6 bg-brand-pearl/50 border-b border-brand-nude flex items-center justify-between">
             <div className="flex items-center gap-2.5">
@@ -69,8 +72,8 @@ export const CartDrawer = ({ onOpenCheckout }) => {
             </div>
           </div>
 
-          {/* Contenido: Lista de Productos */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-2">
+          {/* Contenido: Lista de Productos con scroll nativo protegido */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-2 overscroll-contain" data-lenis-prevent="true">
             {cart.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center py-12">
                 <div className="w-20 h-20 rounded-full bg-brand-pearl text-brand-wine/50 flex items-center justify-center mb-4">

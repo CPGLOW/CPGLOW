@@ -1,27 +1,46 @@
 import React from 'react';
-import { Sparkles, Scissors, Droplets, Smile, HeartHandshake } from 'lucide-react';
-import { CATEGORIES } from '../../constants/categories';
+import { 
+  Sparkles, 
+  Scissors, 
+  Droplets, 
+  Smile, 
+  HeartHandshake, 
+  Crown, 
+  Gem, 
+  Feather, 
+  Flower2, 
+  Tag 
+} from 'lucide-react';
+import { CATEGORIES as DEFAULT_CATEGORIES } from '../../constants/categories';
 
-// Mapa de iconos de Lucide correspondientes
+// Mapa ampliado de iconos de Lucide
 const ICON_MAP = {
-  Sparkles: Sparkles,
-  Scissors: Scissors,
-  Droplets: Droplets,
-  Smile: Smile,
-  HeartHandshake: HeartHandshake,
+  Sparkles,
+  Scissors,
+  Droplets,
+  Smile,
+  HeartHandshake,
+  Crown,
+  Gem,
+  Feather,
+  Flower2,
+  Tag,
 };
 
 export const CategoryFilter = ({
   selectedCategory = 'todos',
+  categories = [],
   onSelectCategory,
   className = '',
 }) => {
+  const activeCategories = (categories && categories.length > 0) ? categories : DEFAULT_CATEGORIES;
+
   return (
     <div className={`overflow-x-auto pb-2 scrollbar-none ${className}`}>
       <div className="flex items-center gap-2.5 min-w-max">
-        {CATEGORIES.map((cat) => {
+        {activeCategories.map((cat) => {
           const isSelected = selectedCategory.toLowerCase() === cat.slug.toLowerCase();
-          const Icon = ICON_MAP[cat.iconName] || Sparkles;
+          const Icon = ICON_MAP[cat.iconName] || Tag;
 
           return (
             <button

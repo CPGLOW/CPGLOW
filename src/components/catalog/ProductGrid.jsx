@@ -8,6 +8,9 @@ export const ProductGrid = ({
   loading = false,
   onViewDetails,
   onResetFilters,
+  isAdmin = false,
+  onEditProduct,
+  onDeleteProduct,
 }) => {
   // Estado de carga (Skeletons elegantes)
   if (loading) {
@@ -60,6 +63,9 @@ export const ProductGrid = ({
           key={product.id}
           product={product}
           onViewDetails={onViewDetails}
+          isAdmin={isAdmin}
+          onEdit={onEditProduct}
+          onDelete={onDeleteProduct}
         />
       ))}
     </div>

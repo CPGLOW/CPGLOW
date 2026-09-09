@@ -1,8 +1,8 @@
 import React from 'react';
-import { MessageCircle, Heart, ShieldCheck, Sparkles } from 'lucide-react';
+import { MessageCircle, Heart, ShieldCheck, Sparkles, Lock } from 'lucide-react';
 import { ENV } from '../../config/env';
 
-export const Footer = () => {
+export const Footer = ({ onOpenAdminLogin }) => {
   const handleOpenWhatsApp = () => {
     const cleanPhone = String(ENV.WHATSAPP_PHONE).replace(/\D/g, '');
     const msg = encodeURIComponent(`✨ ¡Hola ${ENV.STORE_NAME}! Quisiera información sobre sus productos.`);
@@ -29,7 +29,7 @@ export const Footer = () => {
             <div className="pt-2">
               <button
                 onClick={handleOpenWhatsApp}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100 transition-colors cursor-pointer"
               >
                 <MessageCircle className="w-4 h-4 text-emerald-600" />
                 <span>Atención al Cliente por WhatsApp</span>
@@ -75,9 +75,25 @@ export const Footer = () => {
         {/* Barra inferior */}
         <div className="pt-8 border-t border-brand-nude flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-text-muted">
           <p>© {new Date().getFullYear()} {ENV.STORE_NAME}. Todos los derechos reservados.</p>
-          <p className="flex items-center gap-1">
-            Diseñado con <Heart className="w-3.5 h-3.5 text-brand-wine fill-current" /> para realzar tu belleza
-          </p>
+          
+          <div className="flex items-center gap-3">
+            <p className="flex items-center gap-1">
+              Diseñado con <Heart className="w-3.5 h-3.5 text-brand-wine fill-current" /> para realzar tu belleza
+            </p>
+            
+            {/* Acceso discreto de administración */}
+            {onOpenAdminLogin && (
+              <button
+                type="button"
+                onClick={onOpenAdminLogin}
+                className="p-1 rounded-full text-brand-text-muted/40 hover:text-brand-wine transition-colors cursor-pointer"
+                title="Acceso Administración (Ctrl + Shift + A)"
+                aria-label="Acceso Administración"
+              >
+                <Lock className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </footer>
