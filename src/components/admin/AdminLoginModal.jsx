@@ -116,11 +116,16 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
           </div>
         </form>
 
-        {/* Nota de seguridad sin exponer claves */}
+        {/* Nota de seguridad e indicador de versión de despliegue */}
         <div className="mt-6 pt-4 border-t border-brand-nude/70 text-center">
           <p className="text-[11px] text-brand-text-muted">
             Acceso restringido para administración autorizada.
           </p>
+          <div className="mt-1">
+            <span className="inline-block px-2.5 py-0.5 rounded-full bg-brand-blush/40 text-[10px] text-brand-wine font-semibold tracking-wider">
+              CP GLOW v2.1 • Nube Activa
+            </span>
+          </div>
         </div>
       </div>
     </Modal>
