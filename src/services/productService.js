@@ -2,10 +2,13 @@ import { CATEGORIES as INITIAL_CATEGORIES } from '../constants/categories';
 
 /**
  * Capa 1: Servicio de catálogo de productos y categorías
- * Soporta persistencia física en disco mediante /api/products y sincronización en navegador
+ * Soporta persistencia física en disco (local), persistencia inmune a recargas (Vercel/producción),
+ * y respaldo de contingencia.
  */
 const STORAGE_PRODUCTS_KEY = 'cpglow_products_v1';
 const STORAGE_CATEGORIES_KEY = 'cpglow_categories_v1';
+const STORAGE_CUSTOM_ACTIVE_KEY = 'cpglow_custom_catalog_active';
+const STORAGE_CUSTOM_CATS_ACTIVE_KEY = 'cpglow_custom_categories_active';
 
 const getBaseAssetUrl = (filename) => {
   const base = import.meta.env.BASE_URL || './';
@@ -15,9 +18,25 @@ const getBaseAssetUrl = (filename) => {
 
 export const ProductService = {
   /**
-   * Obtiene la lista completa de productos
+   * Obtiene la lista completa de productos.
+   * Si el usuario ha modificado el catálogo, prioriza sus cambios y NO los sobreescribe en recargas.
    */
   async getProducts() {
+    // 1. Prioridad: Verificar si existen datos modificados por el administrador en localStorage
+    try {
+      const isCustomized = localStorage.getItem(STORAGE_CUSTOM_ACTIVE_KEY);
+      const cached = localStorage.getItem(STORAGE_PRODUCTS_KEY);
+      if (isCustomized === 'true' && cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed)) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.warn('Error al leer catálogo local personalizado:', e);
+    }
+
+    // 2. Si no hay catálogo personalizado activo, cargar el catálogo base (products.json)
     try {
       const response = await fetch(getBaseAssetUrl('products.json'), {
         cache: 'no-store',
@@ -30,7 +49,6 @@ export const ProductService = {
       if (response.ok) {
         const products = await response.json();
         if (Array.isArray(products) && products.length > 0) {
-          // Actualiza respaldo en localStorage
           try {
             localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
           } catch {}
@@ -41,7 +59,7 @@ export const ProductService = {
       console.warn('Error al cargar /products.json, intentando respaldo local:', err);
     }
 
-    // Fallback a localStorage si falla el fetch
+    // 3. Fallback de contingencia a cualquier dato previo en localStorage
     try {
       const cached = localStorage.getItem(STORAGE_PRODUCTS_KEY);
       if (cached) {
@@ -53,19 +71,20 @@ export const ProductService = {
   },
 
   /**
-   * Guarda los productos físicamente en disco y en caché
+   * Guarda los productos en localStorage (inmune a recargas en Vercel) y en disco (en desarrollo)
    */
   async saveProducts(productsList) {
     if (!Array.isArray(productsList)) return { success: false, error: 'Lista inválida' };
 
-    // 1. Guardar en localStorage para disponibilidad inmediata
+    // 1. Guardar en localStorage y activar bandera de personalización
     try {
       localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(productsList));
+      localStorage.setItem(STORAGE_CUSTOM_ACTIVE_KEY, 'true');
     } catch (e) {
       console.warn('Error al guardar en localStorage:', e);
     }
 
-    // 2. Intentar guardar físicamente en disco mediante el endpoint de Vite
+    // 2. Intentar guardar físicamente en disco mediante el endpoint de Vite (en desarrollo local)
     try {
       const response = await fetch('/api/products', {
         method: 'POST',
@@ -79,16 +98,29 @@ export const ProductService = {
         return { success: true, persistedOnDisk: true };
       }
     } catch (err) {
-      console.warn('El servidor local /api/products no está disponible:', err);
+      // Normal en entornos estáticos como Vercel
     }
 
     return { success: true, persistedOnDisk: false };
   },
 
   /**
-   * Obtiene la lista de categorías (desde disco o fallback)
+   * Obtiene la lista de categorías (prioriza personalizadas)
    */
   async getCategories() {
+    // 1. Prioridad: Verificar si existen categorías modificadas
+    try {
+      const isCustomized = localStorage.getItem(STORAGE_CUSTOM_CATS_ACTIVE_KEY);
+      const cached = localStorage.getItem(STORAGE_CATEGORIES_KEY);
+      if (isCustomized === 'true' && cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch {}
+
+    // 2. Cargar archivo base categories.json
     try {
       const response = await fetch(getBaseAssetUrl('categories.json'), {
         cache: 'no-store',
@@ -106,7 +138,7 @@ export const ProductService = {
       }
     } catch {}
 
-    // Fallback a localStorage o constantes iniciales
+    // 3. Fallback a localStorage o constantes iniciales
     try {
       const cached = localStorage.getItem(STORAGE_CATEGORIES_KEY);
       if (cached) {
@@ -118,13 +150,14 @@ export const ProductService = {
   },
 
   /**
-   * Guarda las categorías físicamente en disco y en caché
+   * Guarda las categorías personalizadas
    */
   async saveCategories(categoriesList) {
     if (!Array.isArray(categoriesList)) return { success: false };
 
     try {
       localStorage.setItem(STORAGE_CATEGORIES_KEY, JSON.stringify(categoriesList));
+      localStorage.setItem(STORAGE_CUSTOM_CATS_ACTIVE_KEY, 'true');
     } catch {}
 
     try {
@@ -140,6 +173,18 @@ export const ProductService = {
     } catch {}
 
     return { success: true, persistedOnDisk: false };
+  },
+
+  /**
+   * Restablece el catálogo a la versión inicial original de fábrica
+   */
+  resetToFactory() {
+    try {
+      localStorage.removeItem(STORAGE_CUSTOM_ACTIVE_KEY);
+      localStorage.removeItem(STORAGE_CUSTOM_CATS_ACTIVE_KEY);
+      localStorage.removeItem(STORAGE_PRODUCTS_KEY);
+      localStorage.removeItem(STORAGE_CATEGORIES_KEY);
+    } catch {}
   },
 
   /**

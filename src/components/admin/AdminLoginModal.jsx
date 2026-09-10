@@ -11,22 +11,27 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const result = AuthService.login(username, password);
-    setLoading(false);
+    try {
+      const result = await AuthService.login(username, password);
+      setLoading(false);
 
-    if (result.success) {
-      setUsername('');
-      setPassword('');
-      setError('');
-      if (onLoginSuccess) onLoginSuccess();
-      onClose();
-    } else {
-      setError(result.error || 'Credenciales inválidas');
+      if (result.success) {
+        setUsername('');
+        setPassword('');
+        setError('');
+        if (onLoginSuccess) onLoginSuccess();
+        onClose();
+      } else {
+        setError(result.error || 'Credenciales inválidas');
+      }
+    } catch (err) {
+      setLoading(false);
+      setError('Error al procesar autenticación');
     }
   };
 

@@ -14,7 +14,10 @@ yarn-error.log*
 dist/
 dist-ssr/
 
-# Variables de entorno locales temporales
+# Variables de entorno y credenciales privadas
+.env
+.env.*
+.env.local
 *.local
 
 # Archivos del sistema y editores
