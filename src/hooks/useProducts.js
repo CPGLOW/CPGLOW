@@ -14,9 +14,10 @@ export const useProducts = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('default');
 
-  // Carga inicial de productos y categorías
+  // Carga inicial de productos y categorías con escucha en tiempo real
   useEffect(() => {
     let isMounted = true;
+    let unsubscribeLive = null;
 
     async function loadData() {
       setLoading(true);
@@ -32,6 +33,13 @@ export const useProducts = () => {
           setCategories(categoriesData);
           setLoading(false);
         }
+
+        // Si Firebase está activo, escuchar cambios en vivo (para que clientes vean cambios sin recargar)
+        unsubscribeLive = ProductService.subscribeToProducts((liveProducts) => {
+          if (isMounted && Array.isArray(liveProducts)) {
+            setProducts(liveProducts);
+          }
+        });
       } catch (err) {
         if (isMounted) {
           setError('No fue posible cargar el catálogo de productos.');
@@ -44,6 +52,9 @@ export const useProducts = () => {
 
     return () => {
       isMounted = false;
+      if (typeof unsubscribeLive === 'function') {
+        unsubscribeLive();
+      }
     };
   }, []);
 
