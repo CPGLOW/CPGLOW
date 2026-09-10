@@ -9,8 +9,8 @@ export const AuthService = {
    */
   getCredentials() {
     return {
-      username: import.meta.env.VITE_ADMIN_USER || 'admin',
-      password: import.meta.env.VITE_ADMIN_PASSWORD || 'cpglow2026',
+      username: import.meta.env.VITE_ADMIN_USER || 'cpglow-2026',
+      password: import.meta.env.VITE_ADMIN_PASSWORD || 'CPGlow*2026#Adm',
     };
   },
 

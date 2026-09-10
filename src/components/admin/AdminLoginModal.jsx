@@ -64,7 +64,7 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="admin"
+                placeholder="Ingresa tu usuario"
                 required
                 autoFocus
                 className="w-full pl-10 pr-4 py-3 rounded-2xl bg-brand-pearl/40 border border-brand-blush/80 text-sm text-brand-text placeholder:text-brand-text-muted/60 focus:outline-none focus:ring-2 focus:ring-brand-wine focus:bg-white transition-all"
@@ -111,10 +111,10 @@ export const AdminLoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
           </div>
         </form>
 
-        {/* Pista discreta para no olvidar clave */}
+        {/* Nota de seguridad sin exponer claves */}
         <div className="mt-6 pt-4 border-t border-brand-nude/70 text-center">
           <p className="text-[11px] text-brand-text-muted">
-            Credenciales por defecto: <strong className="text-brand-wine">admin</strong> / <strong className="text-brand-wine">cpglow2026</strong>
+            Acceso restringido para administración autorizada.
           </p>
         </div>
       </div>
