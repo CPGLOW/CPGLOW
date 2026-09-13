@@ -32,64 +32,32 @@ export const ProductService = {
    * 2. Si el usuario eliminó todos los productos, respeta la lista vacía y NUNCA re-siembra automáticamente.
    */
   async getProducts() {
-    // 1. Intentar cargar desde Firebase Firestore (Base de Datos en la Nube)
+    // 1. Cargar directamente desde Firebase Firestore (Base de Datos en la Nube)
     if (isFirebaseConfigured && db) {
       try {
         const querySnapshot = await getDocs(collection(db, 'products'));
+        const firestoreProducts = querySnapshot.docs.map((docSnap) => ({
+          id: docSnap.id,
+          ...docSnap.data(),
+        }));
 
-        // Comprobar si la base de datos ya fue inicializada previamente
-        let isAlreadyInitialized = false;
+        // Actualizar caché de contingencia local
         try {
-          const stateDocSnap = await getDoc(doc(db, 'config', 'app_state'));
-          isAlreadyInitialized = stateDocSnap.exists() && Boolean(stateDocSnap.data()?.initialized);
+          localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(firestoreProducts));
+          localStorage.setItem(STORAGE_CUSTOM_ACTIVE_KEY, 'true');
         } catch {}
 
-        if (!querySnapshot.empty) {
-          const firestoreProducts = querySnapshot.docs.map((docSnap) => ({
-            id: docSnap.id,
-            ...docSnap.data(),
-          }));
-
-          // Actualizar caché de contingencia local
-          try {
-            localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(firestoreProducts));
-            localStorage.setItem(STORAGE_CUSTOM_ACTIVE_KEY, 'true');
-          } catch {}
-
-          return firestoreProducts;
-        }
-
-        // Si la base de datos ya fue inicializada y está vacía, respetar que el usuario eliminó todo
-        if (isAlreadyInitialized) {
-          try {
-            localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify([]));
-            localStorage.setItem(STORAGE_CUSTOM_ACTIVE_KEY, 'true');
-          } catch {}
-          return [];
-        }
-
-        // Si es el primer arranque absoluto y nunca se ha inicializado
-        console.info('[CP GLOW Firebase] Primer arranque absoluto: Inicializando catálogo...');
-        try {
-          await setDoc(doc(db, 'config', 'app_state'), { initialized: true, createdAt: Date.now() });
-        } catch {}
-
-        const initialProducts = await this.fetchStaticProducts();
-        if (initialProducts.length > 0) {
-          await this.syncAllProductsToFirestore(initialProducts);
-          return initialProducts;
-        }
-        return [];
+        return firestoreProducts;
       } catch (firestoreErr) {
-        console.warn('[CP GLOW Firebase] Error al consultar Firestore, usando respaldo:', firestoreErr);
+        console.warn('[CP GLOW Firebase] Error al consultar Firestore, usando respaldo local:', firestoreErr);
       }
     }
 
-    // 2. Si no hay Firebase o falló la conexión: Usar datos locales guardados
+    // 2. Si no hay Firebase o falló la conexión: Usar datos locales guardados por el usuario
     try {
       const isCustomized = localStorage.getItem(STORAGE_CUSTOM_ACTIVE_KEY);
       const cached = localStorage.getItem(STORAGE_PRODUCTS_KEY);
-      if (isCustomized === 'true' && cached) {
+      if (isCustomized === 'true' && cached !== null) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed)) {
           return parsed;
@@ -99,12 +67,12 @@ export const ProductService = {
       console.warn('Error al leer catálogo local:', e);
     }
 
-    // 3. Cargar catálogo estático inicial desde products.json
-    return await this.fetchStaticProducts();
+    // 3. Si no hay productos guardados, devolver lista vacía []
+    return [];
   },
 
   /**
-   * Carga el archivo products.json estático
+   * Carga el archivo products.json estático (vacío por defecto)
    */
   async fetchStaticProducts() {
     try {
@@ -118,21 +86,10 @@ export const ProductService = {
 
       if (response.ok) {
         const products = await response.json();
-        if (Array.isArray(products) && products.length > 0) {
-          try {
-            localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(products));
-          } catch {}
+        if (Array.isArray(products)) {
           return products;
         }
       }
-    } catch (err) {
-      console.warn('Error al cargar /products.json:', err);
-    }
-
-    // Fallback de emergencia
-    try {
-      const cached = localStorage.getItem(STORAGE_PRODUCTS_KEY);
-      if (cached) return JSON.parse(cached);
     } catch {}
 
     return [];
