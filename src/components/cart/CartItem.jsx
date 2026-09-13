@@ -15,12 +15,12 @@ export const CartItem = ({ item }) => {
 
   return (
     <div className="flex items-center gap-3.5 py-3.5 border-b border-brand-nude last:border-b-0">
-      {/* Miniatura del producto con encuadre completo */}
-      <div className="w-16 h-16 rounded-2xl bg-white overflow-hidden flex-shrink-0 border border-brand-blush/60 flex items-center justify-center p-1 shadow-sm">
+      {/* Miniatura del producto */}
+      <div className="w-16 h-16 rounded-2xl bg-brand-pearl overflow-hidden flex-shrink-0 border border-brand-blush/60">
         <img
           src={item.imagen}
           alt={item.nombre}
-          className="max-w-full max-h-full object-contain"
+          className="w-full h-full object-cover"
         />
       </div>
 

@@ -66,13 +66,13 @@ export const ProductDetailModal = ({ product, isOpen, onClose }) => {
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-3xl" className="!p-0 h-[90vh] md:h-[600px] max-h-[660px]">
       <div className="flex flex-col md:flex-row h-full w-full overflow-hidden bg-white min-w-0">
         {/* Columna Izquierda / Superior: Galería de Imágenes */}
-        <div className="w-full md:w-1/2 h-56 sm:h-64 md:h-full relative bg-gradient-to-b from-brand-pearl/60 via-white to-brand-pearl/30 flex-shrink-0 flex flex-col justify-between overflow-hidden border-b md:border-b-0 md:border-r border-brand-nude min-w-0">
-          {/* Contenedor de la Imagen Principal con Encuadre Completo y Sin Recortes */}
-          <div className="relative flex-1 w-full h-full overflow-hidden group flex items-center justify-center p-4 sm:p-6 min-h-0">
+        <div className="w-full md:w-1/2 h-72 sm:h-80 md:h-full relative bg-brand-pearl/30 flex-shrink-0 flex flex-col justify-between overflow-hidden border-b md:border-b-0 md:border-r border-brand-nude min-w-0">
+          {/* Contenedor de la Imagen Principal Centrada y de Gran Tamaño */}
+          <div className="relative flex-1 w-full h-full overflow-hidden group flex items-center justify-center p-1.5 sm:p-2.5 min-h-0 bg-white">
             <img
               src={currentImage}
               alt={`${product.nombre} - Foto ${activeImageIndex + 1}`}
-              className="max-w-full max-h-full w-auto h-auto object-contain drop-shadow-md transition-all duration-300 group-hover:scale-105"
+              className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-102"
             />
 
             {/* Badges superiores sobre la imagen */}
@@ -122,13 +122,13 @@ export const ProductDetailModal = ({ product, isOpen, onClose }) => {
 
           {/* Tira de Miniaturas (Thumbnails) para seleccionar fotos con 1 clic */}
           {hasMultipleImages && (
-            <div className="p-2.5 bg-white/80 backdrop-blur-sm border-t border-brand-blush/60 overflow-x-auto scrollbar-none flex items-center gap-2 z-10 justify-center">
+            <div className="p-2 bg-brand-pearl/90 backdrop-blur-sm border-t border-brand-blush/60 overflow-x-auto scrollbar-none flex items-center gap-2 z-10 justify-center flex-shrink-0">
               {allImages.map((imgUrl, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => setActiveImageIndex(idx)}
-                  className={`relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all cursor-pointer bg-white flex items-center justify-center p-0.5 ${
+                  className={`relative w-12 h-12 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all cursor-pointer bg-white flex items-center justify-center ${
                     activeImageIndex === idx
                       ? 'border-brand-wine shadow-glow-wine scale-105'
                       : 'border-brand-nude/70 opacity-70 hover:opacity-100 hover:border-brand-blush'
@@ -138,7 +138,7 @@ export const ProductDetailModal = ({ product, isOpen, onClose }) => {
                   <img
                     src={imgUrl}
                     alt={`Miniatura ${idx + 1}`}
-                    className="max-w-full max-h-full object-contain"
+                    className="w-full h-full object-cover object-center"
                   />
                 </button>
               ))}

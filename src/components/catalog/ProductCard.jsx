@@ -71,8 +71,8 @@ export const ProductCard = ({
         </div>
       )}
 
-      {/* Contenedor de Imagen con Relación de Aspecto Elegante y Encuadre Completo */}
-      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-b from-brand-pearl/50 via-white to-brand-pearl/25 flex items-center justify-center p-3 sm:p-4">
+      {/* Contenedor de Imagen con Relación de Aspecto Elegante */}
+      <div className="relative aspect-square w-full overflow-hidden bg-brand-pearl/60">
         {/* Placeholder mientras carga */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-brand-pearl animate-pulse flex items-center justify-center text-brand-blush">
@@ -84,7 +84,7 @@ export const ProductCard = ({
           src={product.imagen}
           alt={product.nombre}
           onLoad={() => setImageLoaded(true)}
-          className={`max-w-full max-h-full w-auto h-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out ${
+          className={`w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           loading="lazy"
