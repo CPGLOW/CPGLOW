@@ -87,8 +87,8 @@ export const Modal = ({
           </button>
         )}
 
-        {/* Contenido con scroll interno para no desbordar */}
-        <div className="flex-1 overflow-y-auto min-h-0 flex flex-col overscroll-contain" data-lenis-prevent="true">
+        {/* Contenido con scroll interno para no desbordar y sin barras horizontales */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 min-w-0 flex flex-col overscroll-contain" data-lenis-prevent="true">
           {children}
         </div>
       </div>

@@ -25,18 +25,17 @@
     overflow: hidden;
   }
 
-  /* Custom luxury scrollbar */
+  /* Custom luxury scrollbar - oculta barras horizontales antiestéticas */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 0px;
   }
   ::-webkit-scrollbar-track {
-    background: #FAEEEF;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
     background: #F8CCD7;
     border-radius: 9999px;
-    border: 2px solid #FAEEEF;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #99182A;

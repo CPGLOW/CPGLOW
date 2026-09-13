@@ -71,8 +71,8 @@ export const ProductCard = ({
         </div>
       )}
 
-      {/* Contenedor de Imagen con Relación de Aspecto Elegante */}
-      <div className="relative aspect-square w-full overflow-hidden bg-brand-pearl/60">
+      {/* Contenedor de Imagen con Relación de Aspecto Elegante y Encuadre Completo */}
+      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-b from-brand-pearl/50 via-white to-brand-pearl/25 flex items-center justify-center p-3 sm:p-4">
         {/* Placeholder mientras carga */}
         {!imageLoaded && (
           <div className="absolute inset-0 bg-brand-pearl animate-pulse flex items-center justify-center text-brand-blush">
@@ -84,7 +84,7 @@ export const ProductCard = ({
           src={product.imagen}
           alt={product.nombre}
           onLoad={() => setImageLoaded(true)}
-          className={`w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-500 ease-out ${
+          className={`max-w-full max-h-full w-auto h-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out ${
             imageLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           loading="lazy"
@@ -133,20 +133,20 @@ export const ProductCard = ({
       </div>
 
       {/* Cuerpo de la Tarjeta */}
-      <div className="p-5 flex flex-col flex-grow justify-between bg-gradient-to-b from-white to-brand-pearl/30">
-        <div>
+      <div className="p-5 flex flex-col flex-grow justify-between bg-gradient-to-b from-white to-brand-pearl/30 min-w-0">
+        <div className="min-w-0">
           {/* Categoría */}
           <span className="text-[11px] font-bold uppercase tracking-wider text-brand-wine/70 block mb-1">
             {product.categoria}
           </span>
 
           {/* Nombre del Producto */}
-          <h3 className="font-serif text-base sm:text-lg font-bold text-brand-text leading-snug line-clamp-2 group-hover:text-brand-wine transition-colors mb-2">
+          <h3 className="font-serif text-base sm:text-lg font-bold text-brand-text leading-snug line-clamp-2 group-hover:text-brand-wine transition-colors mb-2 break-words">
             {product.nombre}
           </h3>
 
           {/* Breve descripción */}
-          <p className="text-xs text-brand-text-muted line-clamp-2 mb-4 leading-relaxed">
+          <p className="text-xs text-brand-text-muted line-clamp-2 mb-4 leading-relaxed break-words">
             {product.descripcion}
           </p>
         </div>

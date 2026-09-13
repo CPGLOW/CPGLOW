@@ -388,11 +388,11 @@ export const ProductEditorModal = ({
               {/* Vista previa de la foto seleccionada */}
               {imagen && (
                 <div className="flex items-center gap-2.5 p-2 rounded-2xl bg-brand-pearl/70 border border-brand-blush flex-1 w-full sm:w-auto">
-                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-brand-wine flex-shrink-0 bg-white shadow-sm">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-brand-wine flex-shrink-0 bg-white shadow-sm flex items-center justify-center p-0.5">
                     <img
                       src={imagen}
                       alt="Vista previa portada"
-                      className="w-full h-full object-cover"
+                      className="max-w-full max-h-full object-contain"
                       onError={(e) => { e.target.style.display = 'none'; }}
                     />
                   </div>
@@ -491,12 +491,12 @@ export const ProductEditorModal = ({
                     key={index} 
                     className="flex items-center gap-2 p-2 rounded-2xl bg-brand-pearl/60 border border-brand-blush/80"
                   >
-                    <div className="w-10 h-10 rounded-xl overflow-hidden border border-brand-wine/50 flex-shrink-0 bg-white">
+                    <div className="w-10 h-10 rounded-xl overflow-hidden border border-brand-wine/50 flex-shrink-0 bg-white flex items-center justify-center p-0.5">
                       {imgUrl ? (
                         <img
                           src={imgUrl}
                           alt={`Foto adicional ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          className="max-w-full max-h-full object-contain"
                           onError={(e) => { e.target.style.display = 'none'; }}
                         />
                       ) : (
