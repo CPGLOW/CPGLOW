@@ -189,7 +189,7 @@ export const ProductDetailModal = ({ product, isOpen, onClose }) => {
                   <Sparkles className="w-3.5 h-3.5 text-brand-wine" />
                   <span>Modo de uso & Aplicación:</span>
                 </div>
-                <p className="text-xs text-brand-text-muted leading-relaxed">
+                <p className="text-xs text-brand-text-muted leading-relaxed whitespace-pre-line">
                   {product.detalles}
                 </p>
               </div>
@@ -198,8 +198,8 @@ export const ProductDetailModal = ({ product, isOpen, onClose }) => {
             {/* Ingredientes clave */}
             {product.ingredientes && (
               <div className="p-3 rounded-2xl bg-brand-nude/30 border border-brand-nude text-xs text-brand-text-muted leading-relaxed">
-                <span className="font-bold text-brand-text block mb-0.5">Ingredientes clave:</span>
-                {product.ingredientes}
+                <span className="font-bold text-brand-text block mb-1">Ingredientes clave:</span>
+                <p className="text-xs leading-relaxed whitespace-pre-line">{product.ingredientes}</p>
               </div>
             )}
           </div>

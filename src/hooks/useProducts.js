@@ -66,6 +66,9 @@ export const useProducts = () => {
       precio: Number(productData.precio) || 0,
       stock: Number(productData.stock) || 0,
       destacado: Boolean(productData.destacado),
+      badge: productData.badge ? String(productData.badge).trim() : '',
+      detalles: productData.detalles ? String(productData.detalles).trim() : '',
+      ingredientes: productData.ingredientes ? String(productData.ingredientes).trim() : '',
       imagenes: Array.isArray(productData.imagenes) ? productData.imagenes.filter(Boolean) : [],
     };
 
@@ -82,6 +85,9 @@ export const useProducts = () => {
       precio: Number(updatedProductData.precio) || 0,
       stock: Number(updatedProductData.stock) || 0,
       destacado: Boolean(updatedProductData.destacado),
+      badge: updatedProductData.badge ? String(updatedProductData.badge).trim() : '',
+      detalles: updatedProductData.detalles ? String(updatedProductData.detalles).trim() : '',
+      ingredientes: updatedProductData.ingredientes ? String(updatedProductData.ingredientes).trim() : '',
       imagenes: Array.isArray(updatedProductData.imagenes) ? updatedProductData.imagenes.filter(Boolean) : [],
     };
 
