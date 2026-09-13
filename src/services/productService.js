@@ -3,6 +3,7 @@ import { db, isFirebaseConfigured } from './firebase';
 import {
   collection,
   getDocs,
+  getDoc,
   doc,
   setDoc,
   deleteDoc,
@@ -27,14 +28,22 @@ const getBaseAssetUrl = (filename) => {
 export const ProductService = {
   /**
    * Obtiene la lista completa de productos.
-   * 1. Si Firebase está activo, consulta Firestore en la nube (con auto-migración de datos base).
-   * 2. Si no, consulta caché local persistente o archivo base products.json.
+   * 1. Si Firebase está activo, consulta Firestore en la nube.
+   * 2. Si el usuario eliminó todos los productos, respeta la lista vacía y NUNCA re-siembra automáticamente.
    */
   async getProducts() {
     // 1. Intentar cargar desde Firebase Firestore (Base de Datos en la Nube)
     if (isFirebaseConfigured && db) {
       try {
         const querySnapshot = await getDocs(collection(db, 'products'));
+
+        // Comprobar si la base de datos ya fue inicializada previamente
+        let isAlreadyInitialized = false;
+        try {
+          const stateDocSnap = await getDoc(doc(db, 'config', 'app_state'));
+          isAlreadyInitialized = stateDocSnap.exists() && Boolean(stateDocSnap.data()?.initialized);
+        } catch {}
+
         if (!querySnapshot.empty) {
           const firestoreProducts = querySnapshot.docs.map((docSnap) => ({
             id: docSnap.id,
@@ -50,13 +59,27 @@ export const ProductService = {
           return firestoreProducts;
         }
 
-        // Si la colección de Firestore está vacía (primer uso), realizar auto-seed inicial
-        console.info('[CP GLOW Firebase] Colección de productos vacía. Sembrando catálogo inicial en Firestore...');
+        // Si la base de datos ya fue inicializada y está vacía, respetar que el usuario eliminó todo
+        if (isAlreadyInitialized) {
+          try {
+            localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify([]));
+            localStorage.setItem(STORAGE_CUSTOM_ACTIVE_KEY, 'true');
+          } catch {}
+          return [];
+        }
+
+        // Si es el primer arranque absoluto y nunca se ha inicializado
+        console.info('[CP GLOW Firebase] Primer arranque absoluto: Inicializando catálogo...');
+        try {
+          await setDoc(doc(db, 'config', 'app_state'), { initialized: true, createdAt: Date.now() });
+        } catch {}
+
         const initialProducts = await this.fetchStaticProducts();
         if (initialProducts.length > 0) {
           await this.syncAllProductsToFirestore(initialProducts);
           return initialProducts;
         }
+        return [];
       } catch (firestoreErr) {
         console.warn('[CP GLOW Firebase] Error al consultar Firestore, usando respaldo:', firestoreErr);
       }
@@ -200,17 +223,15 @@ export const ProductService = {
       const unsubscribe = onSnapshot(
         collection(db, 'products'),
         (snapshot) => {
-          if (!snapshot.empty) {
-            const list = snapshot.docs.map((docSnap) => ({
-              id: docSnap.id,
-              ...docSnap.data(),
-            }));
-            try {
-              localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(list));
-              localStorage.setItem(STORAGE_CUSTOM_ACTIVE_KEY, 'true');
-            } catch {}
-            callback(list);
-          }
+          const list = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...docSnap.data(),
+          }));
+          try {
+            localStorage.setItem(STORAGE_PRODUCTS_KEY, JSON.stringify(list));
+            localStorage.setItem(STORAGE_CUSTOM_ACTIVE_KEY, 'true');
+          } catch {}
+          callback(list);
         },
         (error) => {
           console.warn('[CP GLOW Firebase] Error en suscripción a productos:', error);
