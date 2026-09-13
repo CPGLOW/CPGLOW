@@ -42,6 +42,12 @@ export default {
         'luxury': '0 10px 30px -10px rgba(43, 14, 20, 0.08)',
         'card': '0 4px 20px -2px rgba(153, 24, 42, 0.05)',
       },
+      scale: {
+        '102': '1.02',
+        '105': '1.05',
+        '108': '1.08',
+        '110': '1.10',
+      },
       animation: {
         'bounce-subtle': 'bounceSubtle 2s infinite',
         'fade-in': 'fadeIn 0.3s ease-out forwards',

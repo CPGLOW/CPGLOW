@@ -63,16 +63,16 @@ export const ProductDetailModal = ({ product, isOpen, onClose }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-3xl" className="!p-0 h-[90vh] md:h-[600px] max-h-[660px]">
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-3xl" className="!p-0 h-[90vh] md:h-[580px] max-h-[640px]">
       <div className="flex flex-col md:flex-row h-full w-full overflow-hidden bg-white min-w-0">
         {/* Columna Izquierda / Superior: Galería de Imágenes */}
-        <div className="w-full md:w-1/2 h-72 sm:h-80 md:h-full relative bg-brand-pearl/30 flex-shrink-0 flex flex-col justify-between overflow-hidden border-b md:border-b-0 md:border-r border-brand-nude min-w-0">
-          {/* Contenedor de la Imagen Principal Centrada y de Gran Tamaño */}
-          <div className="relative flex-1 w-full h-full overflow-hidden group flex items-center justify-center p-1.5 sm:p-2.5 min-h-0 bg-white">
+        <div className="w-full md:w-1/2 h-64 sm:h-72 md:h-full relative bg-brand-pearl flex-shrink-0 flex flex-col justify-between overflow-hidden border-b md:border-b-0 md:border-r border-brand-nude min-w-0">
+          {/* Contenedor de la Imagen Principal Lleno y Centrado */}
+          <div className="relative flex-1 w-full h-full overflow-hidden group">
             <img
               src={currentImage}
               alt={`${product.nombre} - Foto ${activeImageIndex + 1}`}
-              className="w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-102"
+              className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
             />
 
             {/* Badges superiores sobre la imagen */}
